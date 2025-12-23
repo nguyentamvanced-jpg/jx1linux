@@ -1,18 +1,28 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
-REM ===== CONFIG =====
-set UNIKEXE=C:\Tools\UniKey\UniKeyNT.exe
-set SRC=jx1-src-tcvn3
-set DST=jx1-src-utf8
+REM Lấy đường dẫn thư mục chứa BAT
+set BASEDIR=%~dp0
+set UNIKEXE=%BASEDIR%UniKeyNT.exe
 
-REM ===== COPY STRUCTURE =====
+REM SOURCE / DEST
+set SRC=%BASEDIR%server\jxser\server1
+set DST=%BASEDIR%jxser_utf8
+
+echo === TCVN3 -> UTF-8 ===
+
+REM Tạo folder đích nếu chưa có
+if not exist "%DST%" (
+    mkdir "%DST%"
+)
+
+REM Copy toàn bộ cấu trúc
 xcopy "%SRC%" "%DST%" /E /I /Y >nul
 
-REM ===== CONVERT FILES =====
+REM Convert text files
 for /R "%DST%" %%F in (*.lua *.txt) do (
     "%UNIKEXE%" /convertfile "%%F" TCVN3 UTF8
 )
 
-echo DONE: TCVN3 -> UTF-8
+echo DONE: Convert TCVN3 -> UTF-8
 pause
