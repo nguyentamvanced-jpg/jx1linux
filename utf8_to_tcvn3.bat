@@ -1,18 +1,21 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
-REM ===== CONFIG =====
-set UNIKEXE=C:\Tools\UniKey\UniKeyNT.exe
-set SRC=jx1-src-utf8
-set DST=jx1-src-tcvn3
+set BASEDIR=%~dp0
+set UNIKEXE=%BASEDIR%UniKeyNT.exe
 
-REM ===== COPY BACK =====
+set SRC=%BASEDIR%jxser_utf8
+set DST=%BASEDIR%server\jxser\server1
+
+echo === UTF-8 -> TCVN3 ===
+
+REM Copy back
 xcopy "%SRC%" "%DST%" /E /I /Y >nul
 
-REM ===== CONVERT FILES =====
+REM Convert text files
 for /R "%DST%" %%F in (*.lua *.txt) do (
     "%UNIKEXE%" /convertfile "%%F" UTF8 TCVN3
 )
 
-echo DONE: UTF-8 -> TCVN3
+echo DONE: Convert UTF-8 -> TCVN3
 pause
